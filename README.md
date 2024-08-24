@@ -1,2 +1,1 @@
-# geekierblog-artifacts
-Artifacts for blg.gkr.one
+# Artifacts for blg.gkr.one
