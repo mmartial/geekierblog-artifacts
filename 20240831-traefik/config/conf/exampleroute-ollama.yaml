@@ -1,0 +1,16 @@
+## Remove the first # to get a working example
+#http:
+#  # Routers and Services -- https://doc.traefik.io/traefik/routing/overview/
+#  routers:
+#    ollama: # name
+#      entryPoints:
+#        - https # use the "https" entrypoint
+#      rule: 'Host(`ollama.example.com`)' # Desination URL to resolve
+#      service: ollama # name for services matching entry
+##      middlewares: # specify middleware(s) if any
+##        - "middlewarename@file"
+#  services:
+#    ollama:
+#      loadBalancer:
+#        servers:
+#          - url: http://192.168.22.12:11434/
