@@ -1,0 +1,24 @@
+http:
+  middlewares:
+    # Security headers
+    securityHeaders:
+      headers:
+        customResponseHeaders: # Response
+          X-Robots-Tag: "none,noarchive,nosnippet,notranslate,noimageindex" # private network, should not be a problem -- https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag
+          X-Forwarded-Proto: "https"
+          server: ""
+        customRequestHeaders: # Request (enables support for WebSocket)
+          X-Forwarded-Proto: "https"
+        sslProxyHeaders: # SSL Proxy
+          X-Forwarded-Proto: "https"
+        referrerPolicy: "same-origin" # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
+        hostsProxyHeaders:
+          - "X-Forwarded-Host"
+        contentTypeNosniff: true # X-Content-Type-Options=nosniff
+        browserXssFilter: true # X-XSS-Protection=1; mode=block
+        frameDeny: true # X-Frame-Options=deny
+        forceSTSHeader: true # Add the Strict-Transport-Security (STS) header even when the connection is HTTP
+        sslRedirect: true # Allow only https requests
+        stsIncludeSubdomains: true # Add includeSubdomains to the Strict-Transport-Security header
+        stsPreload: true # Add preload flag appended to the Strict-Transport-Security header
+        stsSeconds: 63072000 # Set the max-age of the Strict-Transport-Security header (63072000 = 2 years)

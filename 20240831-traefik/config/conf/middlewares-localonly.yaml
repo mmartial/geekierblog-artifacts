@@ -1,0 +1,9 @@
+http:
+  middlewares:
+    # Only Allow "Local" networks
+    localonly:
+      ipWhiteList:
+        sourceRange: 
+          - 127.0.0.1/32 # localhost
+          - 192.168.22.1/24 # LAN Subnet
+#          - 100.64.0.0/10 # Tailscale Subnet (CGNAT)

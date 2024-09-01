@@ -1,0 +1,38 @@
+services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    ports:
+      - mode: host
+        published: 80
+        target: 80
+      - mode: host
+        published: 443
+        target: 443
+      - 8183:8080
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./config:/etc/traefik
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      # Enable dashboard
+      - traefik.enable=true
+      - traefik.http.routers.api.rule=Host(`traefik.example.com`)
+      - traefik.http.routers.api.entryPoints=https
+      - traefik.http.routers.api.service=api@internal
+      - traefik.http.routers.api.middlewares=dashboardauth@file
+      - com.centurylinklabs.watchtower.enable=true
+    environment:
+      - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
+    deploy:
+      resources:
+        limits:
+          pids: 2048
+
+  whoami:
+    image: traefik/whoami
+    container_name: simple-service
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.whoami.rule=Host(`whoami.example.com`)
+      - traefik.http.routers.whoami.entrypoints=https

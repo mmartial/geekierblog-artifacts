@@ -1,0 +1,14 @@
+# based on https://community.traefik.io/t/minimal-example-for-traefik-with-dashboard-and-basic-auth/18761/11
+#
+# Use by adding labels to the containers: https://doc.traefik.io/traefik/operations/api/
+# traefik.http.routers.api.middlewares=dashboardauth@file
+http:
+  middlewares:
+    # A basic authentification middleware: We will use it to protect the Traefik dashboard
+    dashboardauth:
+      basicAuth:
+        users:
+          # https://doc.traefik.io/traefik/middlewares/http/basicauth/
+          # htpasswd -Bbn admin password
+#          - "admin:PASSWORD_HASHED"
+          - "admin:$2y$05$/KGdQ85ZR1C03Zu3NGkUDeVsVcfPuw/qN8bR34z/MduPZTucQlXwi"

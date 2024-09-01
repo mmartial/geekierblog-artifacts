@@ -1,0 +1,77 @@
+global: # https://doc.traefik.io/traefik/reference/static-configuration/cli-ref/
+  checkNewVersion: true # Periodically check if a new version has been released.
+  sendAnonymousUsage: false # Periodically send anonymous usage statistics
+
+
+api: # https://doc.traefik.io/traefik/operations/api/
+  # We are not exposing our server to the internet, only internal use
+  dashboard: true # Enable the dashboard -- https://doc.traefik.io/traefik/operations/dashboard/
+  insecure: true # Enable the API in insecure mode, which means that the API will be available directly on the entryPoint named traefik
+  debug: false # Disable additional endpoints for debugging and profiling
+
+
+log: # https://doc.traefik.io/traefik/observability/logs/
+  level: INFO # Possible values: INFO|DEBUG|ERROR
+
+
+serversTransport: # https://doc.traefik.io/traefik/routing/services/#serverstransport
+  insecureSkipVerify: true # controls whether the server's certificate chain and host name is verified -- https://doc.traefik.io/traefik/routing/services/#insecureskipverify
+
+
+entryPoints: # https://doc.traefik.io/traefik/routing/entrypoints/
+  # redirect http to https
+  http:
+    address: :80
+    http:
+      redirections:
+        entryPoint:
+          to: https
+          scheme: https
+  # use HTTPS with a domain wildcard
+  https:
+    address: :443
+    http:
+      tls:
+        # Generate a wildcard domain certificate
+        certResolver: letsencrypt # the name here needs to match the one in the certificatesResolvers section
+        domains:
+          - main: example.com
+            sans:
+              - '*.example.com'
+      middlewares:
+        - securityHeaders@file
+        - gzip@file
+
+
+providers:
+  providersThrottleDuration: 10s # Configuration reload frequency
+
+  # File provider for connecting things that are outside of docker / defining middleware
+  file:
+    directory: /etc/traefik/conf/
+    watch: true
+
+  # Docker provider for connecting all apps that are inside of the docker network
+  docker:
+    watch: true
+    network: traefik_default # "common" network: If using a custom docker network (ex: on Unraid), add it here, for docker-compose, each container will need to also be on this network and for labels to be added to enable them to be exposed by traefik
+    # Default url rule to be "containername.domain.tld", make sure to start containers with pre-defined names to avoid mutliple services with the same name from multiple servers or override with a label: traefik.http.routers.service-name.rule=Host(`wanted-name.example.com`)
+    defaultRule: "Host(`{{ lower (trimPrefix `/` .Name )}}.example.com`)"
+    exposedByDefault: false # only expose containers (on the common network) with labels sets: 1) traefik.enable=true 2) traefik.http.routers.service-name.entryPoints=https
+    endpoint: 'unix:///var/run/docker.sock' # Classic method
+
+
+# Use letsencrypt to generate ssl serficiates
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: user@gmail.com # The email address to be registered with Let's Encrypt
+      storage: /etc/traefik/acme.json
+      dnsChallenge:
+        provider: cloudflare
+        delayBeforeCheck: 10s
+        # Used to make sure the dns challenge is propagated to the rights dns servers
+        resolvers:
+          - "192.168.22.1:53" # if using a Firewalla or another tool for DNS over HTTPs, use the IP of the service directly -- https://help.firewalla.com/hc/en-us/community/posts/11204990438291/comments/13712366074643
+#          - "1.1.1.1:53" # CloudFlare DNS
+#          - "8.8.8.8:53" # Google DNS
