@@ -39,7 +39,7 @@ entryPoints: # https://doc.traefik.io/traefik/routing/entrypoints/
             sans:
               - '*.example.com'
       middlewares:
-        - securityHeaders@file
+        - securityHeaders_light@file
         - gzip@file
 
 

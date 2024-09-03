@@ -1,0 +1,16 @@
+http:
+  middlewares:
+    securityHeaders_light:
+      headers:
+        customResponseHeaders: # Response
+          X-Robots-Tag: "none,noarchive,nosnippet,notranslate,noimageindex" # private network, should not be a problem -- https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag
+          X-Forwarded-Proto: "https"
+
+        customRequestHeaders: # Request (enables support for WebSocket)
+          X-Forwarded-Proto: "https"
+
+        sslProxyHeaders: # SSL Proxy
+          X-Forwarded-Proto: "https"
+
+        hostsProxyHeaders:
+          - "X-Forwarded-Host"

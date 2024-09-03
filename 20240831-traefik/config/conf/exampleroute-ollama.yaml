@@ -8,7 +8,7 @@
 #      rule: 'Host(`ollama.example.com`)' # Desination URL to resolve
 #      service: ollama # name for services matching entry
 ##      middlewares: # specify middleware(s) if any
-##        - "middlewarename@file"
+##        - "securityHeaders@file" # the default "https" entrypoint follows the "light" security headers version, uncomment this section to enble the more restrictive version
 #  services:
 #    ollama:
 #      loadBalancer:
