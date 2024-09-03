@@ -1,6 +1,5 @@
 http:
   middlewares:
-    # Security headers
     securityHeaders:
       headers:
         customResponseHeaders: # Response
