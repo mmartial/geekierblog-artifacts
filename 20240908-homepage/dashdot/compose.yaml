@@ -1,0 +1,30 @@
+services:
+  dash:
+    image: mauricenino/dashdot:nvidia
+    restart: unless-stopped
+    privileged: true
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities:
+                - gpu
+    ports:
+      - 3001:3001
+    volumes:
+      - /:/mnt/host:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      DASHDOT_WIDGET_LIST: os,cpu,storage,ram,network,gpu
+      DASHDOT_SHOW_HOST: true
+      DASHDOT_CUSTOM_HOST: myhostname
+      DASHDOT_OVERRIDE_OS: myos
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+      - homepage.name=Dashdot
+      - homepage.group=tabname_apps
+      - homepage.icon=dashdot.png
+      - homepage.href=https://dashdot.example.com/
+      - homepage.description=Dashdot (tabname)
+networks: {}
