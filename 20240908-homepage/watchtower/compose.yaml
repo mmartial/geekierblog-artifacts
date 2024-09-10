@@ -1,0 +1,14 @@
+services:
+  watchtower:
+    container_name: watchtower
+    image: containrrr/watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    command: --cleanup --schedule "0 0 2 * * *" --include-stopped --label-enable --http-api-update --http-api-metrics --http-api-periodic-polls
+    environment:
+      - WATCHTOWER_HTTP_API_TOKEN=tab-token
+    ports:
+      - 28080:8080
