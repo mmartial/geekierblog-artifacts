@@ -27,4 +27,3 @@ services:
       - homepage.icon=dashdot.png
       - homepage.href=https://dashdot.example.com/
       - homepage.description=Dashdot (tabname)
-networks: {}
