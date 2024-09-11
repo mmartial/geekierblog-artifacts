@@ -1,0 +1,19 @@
+services:
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    ports:
+      - 33009:3000 # changing the default exposed port to 33009
+    volumes:
+      - ./config:/app/config # Make sure your local config directory exists
+      - /var/run/docker.sock:/var/run/docker.sock:ro # remove if using Docker Socket Proxy, as seen in our configuration file
+    labels:
+      - com.centurylinklabs.watchtower.enable=true # update with Watchtower
+      - traefik.enable=true # (optional, remove if not using Traefik) This configuration follow the instructions set in the corresponding blog post
+      - traefik.http.routers.home.entrypoints=https # HTTPs upgrade
+      - traefik.http.routers.home.rule=Host(`home.example.com`) # here we are only providing the "main" homepage instance
+      - homepage.group=host_dynamic # The group is used by the layout to place content, we use the host_ entry to separate the tabs
+      - homepage.name=Homepage # name of the application
+      - homepage.instance.main.href=https://home.example.com/ # "main" instance behind a reverse proxy
+      - homepage.instance.alt.href=https://home.example.net/ # "alt"-ernate instance behind a reverse proxy
+      - homepage.description=HomePage (host) # Can be used to provide "quick launch" search content; having the host listed makes it simpler to find the right instance of a software in a multiple machine deployment
