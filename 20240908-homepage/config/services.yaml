@@ -1,0 +1,54 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/latest/configs/services
+
+###########################################################
+## tab1
+
+- tab1_static:
+    - Dockge:
+        icon: dockge.png
+        href: https://dockge.example.com/
+        description: Dockge (tab1)
+        server: tab1-docker
+        container: replace_with_the_running_container_name
+
+- tab1_metrics:
+    - CPU:
+        header: false
+        widget:
+            type: iframe
+            name: myIframe
+            src: https://dashdot.example.com/?graph=cpu&theme=dark&showPercentage=true
+            classes: sm:h-16
+    - RAM:
+        widget:
+            type: iframe
+            name: myIframe
+            src: https://dashdot.example.com/?graph=ram&theme=dark&showPercentage=true
+            classes: sm:h-16
+    - GPU:
+        widget:
+            type: iframe
+            name: myIframe
+            src: https://dashdot.example.com/?graph=gpu&theme=dark&showPercentage=true
+            classes: sm:h-16
+    - Network:
+        widget:
+            type: iframe
+            name: myIframe
+            src: https://dashdot.example.com/?graph=network&theme=dark&showPercentage=true
+            classes: sm:h-16
+    - Storage:
+        widget:
+            type: iframe
+            name: myIframe
+            src: https://dashdot.example.com/?graph=storage&theme=dark&showPercentage=true&multiView=true
+            classes: sm:h-16
+
+- tab1_monitors:
+    - WatchTower:
+        widget:
+            type: watchtower
+            url: https://watchtower.example.com/
+            key: tab1-token
