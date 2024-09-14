@@ -6,3 +6,10 @@
 server1-docker:
   host: 192.168.22.11
   port: 2375
+
+# my-docker:
+#   host: 127.0.0.1
+#   port: 2375
+
+# my-docker:
+#   socket: /var/run/docker.sock
