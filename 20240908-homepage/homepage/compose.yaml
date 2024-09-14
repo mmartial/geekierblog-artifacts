@@ -12,8 +12,9 @@ services:
       - traefik.enable=true # (optional, remove if not using Traefik) This configuration follow the instructions set in the corresponding blog post
       - traefik.http.routers.home.entrypoints=https # HTTPs upgrade
       - traefik.http.routers.home.rule=Host(`home.example.com`) # here we are only providing the "main" homepage instance
-      - homepage.group=host_dynamic # The group is used by the layout to place content, we use the host_ entry to separate the tabs
+      - homepage.group=host_dynamic # The layout uses the group to place content. We use the host_ entry to separate the tabs
       - homepage.name=Homepage # name of the application
+      - homepage.icon=homepage.png # can also use complete URLs
       - homepage.instance.main.href=https://home.example.com/ # "main" instance behind a reverse proxy
       - homepage.instance.alt.href=https://home.example.net/ # "alt"-ernate instance behind a reverse proxy
       - homepage.description=HomePage (host) # Can be used to provide "quick launch" search content; having the host listed makes it simpler to find the right instance of a software in a multiple machine deployment
