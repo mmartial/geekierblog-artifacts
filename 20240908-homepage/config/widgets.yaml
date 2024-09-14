@@ -1,0 +1,40 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/latest/configs/service-widgets
+
+# Show CPU, Memory and Disk usage in the header section for the system hosting homepage
+# https://gethomepage.dev/latest/widgets/info/resources/
+- resources:
+    cpu: true
+    memory: true
+    expanded: true
+    disk: /mountpoint
+
+
+# Show a search box in the header section
+# configure the search provider as preferred
+# https://gethomepage.dev/latest/widgets/info/search/
+- search:
+    provider: duckduckgo
+    focus: false
+    showSearchSuggestions: false
+    target: _blank
+
+# Show a clock in the header section
+# configure the format as preferred
+# https://gethomepage.dev/latest/widgets/info/datetime/
+- datetime:
+    text_size: x1
+    format:
+      dateStyle: short
+      timeStyle: short
+      hour12: false
+
+# Show the current weather in the header section
+# https://gethomepage.dev/latest/widgets/info/openmeteo/
+- openmeteo:
+    label: My location
+#    latitude: ADAPT
+#    longitude: ADAPT
+    units: metric
+    cache: 10
