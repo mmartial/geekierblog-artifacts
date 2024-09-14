@@ -1,0 +1,98 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/latest/configs/settings
+
+# title of the page
+title: Main -- example.com
+
+# https://gethomepage.dev/latest/configs/settings/#header-style
+headerStyle: boxedWidgets
+
+# show Docker stats for all services
+# https://gethomepage.dev/latest/configs/settings/#show-docker-stats
+showStats: true
+
+# https://gethomepage.dev/latest/configs/settings/#collapsible-sections
+disableCollapse: false
+
+# This instance name: matches the docker label used
+instanceName: main
+
+# https://gethomepage.dev/latest/configs/settings/#five-columns
+fiveColumns: true
+
+# Quicklaunch can be used to search for services using keyboard entries
+#   that will match either the name or the description for the service as set in the docker labels
+# https://gethomepage.dev/latest/configs/settings/#quick-launch
+quicklaunch:
+  searchDescriptions: true
+  hideInternetSearch: true
+  showSearchSuggestions: true
+  hideVisitURL: true
+
+# Customize your background image
+# There are multtiple sub-options, see the docs
+# https://gethomepage.dev/latest/configs/settings/#background-image
+background: https://images.unsplash.com/photo-1502790671504-542ad42d5189?auto=format&fit=crop&w=2560&q=80
+
+# Card blur
+# https://gethomepage.dev/latest/configs/settings/#card-background-blur
+cardBlur: md # or sm, lg
+
+# https://gethomepage.dev/latest/configs/settings/#layout
+# This layout make use of tabs to separate items either per server or per purpose, adapt names as needed
+# We will use only confgiure one tab in this example
+# This tab will have 4x sections: metrics, static, apps, and monitors
+# https://gethomepage.dev/latest/configs/settings/#tabs
+# Although we will only fully configure one tab, the content can be duplicated for other tabs
+layout:
+  # tab1
+  tab1_metrics:
+    tab1: tab1
+    style: row
+    columns: 5
+    header: false
+
+  tab1_static:
+    tab: tab1
+    style: row
+    columns: 5
+    header: false
+
+  tab1_apps:
+    tab: tab1
+    style: row
+    columns: 5
+    header: false
+
+  tab1_monitors:
+    tab: tab1
+    style: row
+    columns: 5
+    header: false
+
+  # tab2
+#  tab2_metrics:
+#    tab: tab2
+#    style: row
+#    columns: 5
+#    header: false
+#
+#  tab2_static:
+#    tab: tab2
+#    style: row
+#    columns: 5
+#    header: false
+#
+#  tab2_apps:
+#    tab: tab2
+#    style: row
+#    columns: 5
+#    header: false
+#
+#  tab2_monitors:
+#    tab: tab2
+#    style: row
+#    columns: 5
+#    header: false
+

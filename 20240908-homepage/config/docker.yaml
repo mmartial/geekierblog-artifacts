@@ -1,0 +1,8 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/latest/configs/docker/
+
+# Adapt name, host and port as needed
+server1-docker:
+  host: 192.168.22.11
+  port: 2375
