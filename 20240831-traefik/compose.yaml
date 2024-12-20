@@ -2,6 +2,7 @@ services:
   traefik:
     image: traefik:latest
     container_name: traefik
+    restart: always
     ports:
       - mode: host
         published: 80
@@ -32,6 +33,7 @@ services:
   whoami:
     image: traefik/whoami
     container_name: simple-service
+    restart: always
     labels:
       - traefik.enable=true
       - traefik.http.routers.whoami.rule=Host(`whoami.example.com`)
