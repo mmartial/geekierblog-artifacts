@@ -41,7 +41,10 @@ entryPoints: # https://doc.traefik.io/traefik/routing/entrypoints/
       middlewares:
         - securityHeaders_light@file
         - gzip@file
-
+    transport:
+      respondingTimeouts:
+        readTimeout: 30m
+        # changing from the default of 60s to 30m to avoid timeouts on large file uploads -- https://doc.traefik.io/traefik/routing/entrypoints/#transport
 
 providers:
   providersThrottleDuration: 10s # Configuration reload frequency
