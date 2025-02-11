@@ -63,7 +63,12 @@ providers:
     exposedByDefault: false # only expose containers (on the common network) with labels sets: 1) traefik.enable=true 2) traefik.http.routers.service-name.entryPoints=https
     endpoint: 'unix:///var/run/docker.sock' # Classic method
 #    endpoint: "tcp://dockersocket:2375"  # https://github.com/Tecnativa/docker-socket-proxy
-
+# Enable redis provider to use https://github.com/jittering/traefik-kop
+#  redis:
+#    endpoints:
+#      # assumes a redis link with this service name running on the same
+#      # docker host as traefik
+#      - "redis:6379"
 
 # Use letsencrypt to generate ssl serficiates
 certificatesResolvers:

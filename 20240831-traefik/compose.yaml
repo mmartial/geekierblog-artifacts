@@ -30,6 +30,17 @@ services:
         limits:
           pids: 2048
 
+# Basic configuration for redis -- uncomment if using https://github.com/jittering/traefik-kop
+#  redis:
+#    image: redis:latest
+#    container_name: redis
+#    restart: always
+#    volumes:
+#      - ./redis_data:/data
+#    ports:
+#      - 6379:6379
+
+
   whoami:
     image: traefik/whoami
     container_name: simple-service
