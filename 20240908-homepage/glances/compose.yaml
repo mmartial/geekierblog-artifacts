@@ -27,6 +27,6 @@ services:
       - homepage.name=Glances
       - homepage.group=foo_apps
       - homepage.icon=glances.png
-      - homepage.instance.href=https://glances.example.com/
+      - homepage.href=https://glances.example.com/
       - homepage.description=Glances (foo)
 networks: {}
