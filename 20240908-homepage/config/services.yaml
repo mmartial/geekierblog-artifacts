@@ -28,11 +28,17 @@
             src: https://dashdot.example.com/?graph=ram&theme=dark&showPercentage=true
             classes: sm:h-16
     - GPU:
+#        widget:
+#            type: iframe
+#            name: myIframe
+#            src: https://dashdot.example.com/?graph=gpu&theme=dark&showPercentage=true
+#            classes: sm:h-16
         widget:
-            type: iframe
-            name: myIframe
-            src: https://dashdot.example.com/?graph=gpu&theme=dark&showPercentage=true
-            classes: sm:h-16
+            type: glances
+            version: 4
+            url: http://192.168.22.99:61208
+            metric: gpu:nvidia0
+            chart: true
     - Network:
         widget:
             type: iframe
