@@ -1,0 +1,32 @@
+services:
+  monitoring-foo:
+    image: nicolargo/glances:ubuntu-latest-full
+    pid: host
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/os-release:/etc/os-release:ro
+    # If you want to modify the configuration file, obtain it from https://github.com/nicolargo/glances 
+    #      - ./glances.conf:/etc/glances/glances.conf
+    ports:
+      - 61208:61208
+    environment:
+      - GLANCES_OPT=-w
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities:
+                - gpu
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=true
+      - traefik.http.routers.glances.entrypoints=https
+      - traefik.http.routers.glances.rule=Host(`glances.example.com`)
+      - homepage.name=Glances
+      - homepage.group=foo_apps
+      - homepage.icon=glances.png
+      - homepage.instance.href=https://glances.example.com/
+      - homepage.description=Glances (foo)
+networks: {}
