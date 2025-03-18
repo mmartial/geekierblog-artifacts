@@ -4,6 +4,8 @@ services:
     container_name: homepage
     ports:
       - 33009:3000 # changing the default exposed port to 33009
+    environment:
+      - HOMEPAGE_ALLOWED_HOSTS=home.example.com,home.example.net
     volumes:
       - ./config:/app/config # Make sure your local config directory exists
       - /var/run/docker.sock:/var/run/docker.sock:ro # remove if using Docker Socket Proxy, as seen in our configuration file
