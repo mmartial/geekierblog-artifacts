@@ -2,9 +2,11 @@ services:
   monitoring-foo:
     image: nicolargo/glances:ubuntu-latest-full
     pid: host
+    restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /etc/os-release:/etc/os-release:ro
+      - /:/rootfs:ro
     # If you want to modify the configuration file, obtain it from https://github.com/nicolargo/glances 
     #      - ./glances.conf:/etc/glances/glances.conf
     ports:
