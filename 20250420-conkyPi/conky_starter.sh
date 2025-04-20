@@ -4,7 +4,7 @@
 # - Open Startup Applications (gnome-session-properties)
 # - Click Add
 # - Name: Conky Monitor
-# - Command: ~/.config/conky/conky_starter.sh
+# - (adapt <YOURUSER>) Command: /home/<YOURUSER>/.config/conky/conky_starter.sh
 
 # Path to the conky binary
 CONKY_BIN="/usr/bin/conky"
