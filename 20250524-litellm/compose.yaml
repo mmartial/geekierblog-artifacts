@@ -1,0 +1,51 @@
+services:
+  litellm:
+    image: ghcr.io/berriai/litellm:main-stable
+    restart: unless-stopped
+    ports:
+      - 44000:4000
+    environment:
+      DATABASE_URL: postgresql://${DB_USER}:${DB_PASS}@ltl-db:5432/${DB_NAME}
+      STORE_MODEL_IN_DB: "True" # allows adding models to proxy via UI
+      LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY}
+      LITELLM_SALT_KEY: ${LITELLM_SALT_KEY}
+    depends_on:
+      - ltl-db # Indicates that this service depends on the 'ltl-db' service, ensuring it starts first
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - wget -O/tmp/temp --quiet http://127.0.0.1:4000/health/liveliness || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=true
+      - traefik.http.routers.ltl.entrypoints=https
+      - traefik.http.routers.ltl.rule=Host(`ltl.example.com`)
+      - homepage.name=LiteLLM
+      - homepage.group=foo_apps
+      - homepage.icon=https://github.com/BerriAI/litellm/blob/main/docs/my-website/img/favicon.png?raw=true
+      - homepage.href=https://ltl.example.com/ui
+      - homepage.description=LiteLLM (foo)
+
+  ltl-db:
+    image: postgres:16
+    restart: always
+    container_name: litellm_db
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -d ${DB_NAME} -U ${DB_USER}
+      interval: 1s
+      timeout: 5s
+      retries: 10
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
