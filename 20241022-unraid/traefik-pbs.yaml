@@ -1,0 +1,18 @@
+http:
+  routers:
+    pbs:
+      entryPoints:
+        - https
+      rule: 'Host(`pbs.example.com`)'
+      service: pbs
+  services:
+    pbs:
+      loadBalancer:
+        passHostHeader: true
+        serversTransport: "pbs"
+        servers:
+          - url: https://192.168.22.11:8007/
+  serversTransports:
+    pbs:
+      insecureSkipVerify: true
+# ^ Solution for self-signed certificates
