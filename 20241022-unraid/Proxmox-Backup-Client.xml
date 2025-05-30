@@ -16,7 +16,7 @@
   </Overview>
   <Category>Backup:</Category>
   <WebUI/>
-  <TemplateURL/>
+  <TemplateURL>https://raw.githubusercontent.com/mmartial/geekierblog-artifacts/refs/heads/main/20241022-unraid/Proxmox-Backup-Client.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/andrejwithj/Unraid-Templates/refs/heads/main/icons/proxmox-backup-client.png</Icon>
   <ExtraParams>--hostname=proxmox-backup-client --mount type=tmpfs,target=/tmp,tmpfs-size=1G --mount type=tmpfs,target=/run:exec,tmpfs-size=64m --restart unless-stopped</ExtraParams>
   <PostArgs/>
