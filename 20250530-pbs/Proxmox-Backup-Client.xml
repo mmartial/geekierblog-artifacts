@@ -37,5 +37,5 @@
   <Config Name="Backup Path 2" Target="/backups/path2" Default="" Mode="ro" Description="" Type="Path" Display="always" Required="false" Mask="false"/>
   <Config Name="Backup Path 3" Target="/backups/path3" Default="" Mode="ro" Description="" Type="Path" Display="always" Required="false" Mask="false"/>
   <Config Name="CRON_BACKUP_ONLY" Target="CRON_BACKUP_ONLY" Default="" Mode="" Description="ADDED FOR INITIAL SETUP -- Set to 0 after initial backup is completed (and to confirm the backup occurs)&#13;&#10;If you want to skip backup on startup, set CRON_BACKUP_ONLY=1 otherwise CRON_BACKUP_ONLY=0" Type="Variable" Display="always" Required="false" Mask="false">1</Config>
-  <Config Name="TZ=Etc/UTC" Target="TZ" Default="" Mode="" Description="TimeZone. Used for backup date generation" Type="Variable" Display="always" Required="false" Mask="false">TZ=USA/New_York</Config>
+  <Config Name="TZ=Etc/UTC" Target="TZ" Default="" Mode="" Description="TimeZone. Used for backup date generation" Type="Variable" Display="always" Required="false" Mask="false">America/New_York</Config>
 </Container>
