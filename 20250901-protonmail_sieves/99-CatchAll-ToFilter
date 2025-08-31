@@ -1,0 +1,12 @@
+require ["include", "environment", "variables", "relational", "comparator-i;ascii-numeric", "spamtest", "fileinto"];
+
+# Generated: Do not run this script on spam messages
+if allof (environment :matches "vnd.proton.spam-threshold" "*",
+spamtest :value "ge" :comparator "i;ascii-numeric" "${1}")
+{
+    return;
+}
+
+# Any email not processed by any previous rule is sent to the ToFilter folder
+fileinto "ToFilter";
+stop; # There are not futher rule, if one exist, comment this stop to allow it to be processed
