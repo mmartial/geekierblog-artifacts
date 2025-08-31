@@ -1,0 +1,16 @@
+require ["include", "environment", "variables", "relational", "comparator-i;ascii-numeric", "spamtest"];
+
+# Generated: Do not run this script on spam messages
+if allof (environment :matches "vnd.proton.spam-threshold" "*",
+spamtest :value "ge" :comparator "i;ascii-numeric" "${1}")
+{
+    return;
+}
+
+# Inbox -- no further processing -> stop if destination email is recognized as an email going to Inbox
+if anyof (
+	# mytld1.tld -> me@mytld1.tld
+    address :is "to" "me@mytld1.tld"
+    # mytld2.tld -> me@mytld2.tld
+    address :is "to" "me@mytld2.tld"
+) { stop; }

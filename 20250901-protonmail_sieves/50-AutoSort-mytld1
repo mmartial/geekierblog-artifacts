@@ -1,0 +1,66 @@
+require ["include", "environment", "variables", "relational", "comparator-i;ascii-numeric", "spamtest", "fileinto"];
+
+# Generated: Do not run this script on spam messages
+if allof (environment :matches "vnd.proton.spam-threshold" "*",
+spamtest :value "ge" :comparator "i;ascii-numeric" "${1}")
+{
+    return;
+}
+
+# Sort iuto a folder and one or more label for specific emails from mytld1.tld
+
+set "base" "CONTINUE";
+
+# Financial
+if anyof (
+    address :is "to" "bank@mytld1.tld",
+    address :is "to" "paypal@mytld1.tld",
+    address :is "to" "venmo@mytld1.tld"
+) {
+    fileinto "Important"; # Only one folder
+	fileinto "Financial"; # As many labels as needed
+    set "base" "";
+}
+
+# Health
+if address :is "to" "health@mytld1.tld" {
+    fileinto "Important";
+	fileinto "Health";
+    set "base" "";
+}
+
+# Entertainment
+if anyof (
+    address :is "to" "fun@mytld1.tld"
+) {
+    fileinto "Entertainment";
+    set "base" "";
+}
+
+# Gaming
+if anyof (
+    address :is "to" "gaming@mytld1.tld"
+) {
+    fileinto "Entertainment";
+	fileinto "Gaming";
+    set "base" "";
+}
+
+# Technology
+if anyof (
+    address :is "to" "tech@mytld1.tld"
+) {
+  	fileinto "Technology";
+    set "base" "";
+}
+
+# Shopping
+if address :is "to" "shop@mytld1.tld" {
+    fileinto "Shopping";
+    set "base" "";
+}
+
+# Stop if processed by any of the rules above
+if string :is "${base}" "" {
+	stop;
+}

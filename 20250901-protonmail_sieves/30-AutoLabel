@@ -1,0 +1,33 @@
+require ["include", "environment", "variables", "relational", "comparator-i;ascii-numeric", "spamtest", "fileinto"];
+
+# Generated: Do not run this script on spam messages
+if allof (environment :matches "vnd.proton.spam-threshold" "*",
+spamtest :value "ge" :comparator "i;ascii-numeric" "${1}")
+{
+    return;
+}
+
+######### Autolabel: never stops, one email can have multiple labels, but can only be in one folder
+# Folders/Labels should exist before running this sieve
+
+
+# Amazon
+if anyof (
+    address :domain :is "from" "amazon.com",
+    address :domain :is "from" "woot.com",
+    address :domain :is "from" "audible.com"
+) {
+  fileinto "Shopping"; # Move to Shopping folder
+  fileinto "Amazon"; # Add Amazon label
+}
+
+# Apple
+if address :domain :is "from" "apple.com" { fileinto "Apple"; } # Add Apple label
+
+# KickStarter
+if address :domain :is "from" "kickstarter.com" { fileinto "KickStarter"; } # Add KickStarter label
+
+# Patreon
+if address :domain :is "from" "patreon.com" { fileinto "Patreon"; } # Add Patreon label
+
+# Add more rules as needed

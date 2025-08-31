@@ -1,0 +1,95 @@
+require ["include", "environment", "variables", "relational", "comparator-i;ascii-numeric", "spamtest"];
+require ["fileinto", "envelope"];
+
+# Generated: Do not run this script on spam messages
+if allof (environment :matches "vnd.proton.spam-threshold" "*",
+spamtest :value "ge" :comparator "i;ascii-numeric" "${1}")
+{
+    return;
+}
+
+# Sort email to me@+Folder+Label1+Label2+Label3+Label4@mytld2.tld into one Folder and multiple Labels
+# foldder and labels must exist before running this sieve
+
+# restrict to emails to me@mytld2.tld only
+set "myDomain" "mytld2.tld";
+set "myBase" "me";
+
+# Pick the address header to inspect (X-Original-To preferred)
+if not envelope :domain :matches "To" "${myDomain}" {
+  return;
+}
+
+if envelope :localpart :matches "To" "*+*" {
+  set "base" "${1}";
+  set "tags" "${2}";
+} else {
+  return;
+}
+
+if not string :is "${base}" "${myBase}" {
+  return;
+}
+
+# Iteratively peel tags and apply as folder or labels (use the same function so it is recommended to avoid naming collision)
+# Expecting the first entry to be the Folder (if used)
+
+set "folder" "${tags}";
+if string :matches "${tags}" "*+*" {
+  set "folder" "${1}";
+  set "tags" "${2}";
+} else {
+  set "tags" "";
+}
+
+if string :is "${folder}" "" {
+  return; # skip if no folder so other rules can process
+}
+
+set "label1" "${tags}";
+if string :matches "${tags}" "*+*" {
+  set "label1" "${1}";
+  set "tags" "${2}";
+} else {
+  set "tags" "";
+}
+
+set "label2" "${tags}";
+if string :matches "${tags}" "*+*" {
+  set "label2" "${1}";
+  set "tags" "${2}";
+} else {
+  set "tags" "";
+}
+
+set "label3" "${tags}";
+if string :matches "${tags}" "*+*" {
+  set "label3" "${1}";
+  set "tags" "${2}";
+} else {
+  set "tags" "";
+}
+
+set "label4" "${tags}";
+if string :matches "${tags}" "*+*" {
+  set "label4" "${1}";
+  set "tags" "${2}";
+} else {
+  set "tags" "";
+}
+
+fileinto "${folder}"; # move to folder (or label) -- there can be only one folder but multiple labels
+if not string :is "${label1}" "" {
+  fileinto "${label1}";
+}
+if not string :is "${label2}" "" {
+  fileinto "${label2}";
+}
+if not string :is "${label3}" "" {
+  fileinto "${label3}";
+}
+if not string :is "${label4}" "" {
+  fileinto "${label4}";
+}
+
+stop; # Do not continue to the next rule
