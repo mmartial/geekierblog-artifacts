@@ -1,0 +1,24 @@
+require ["include", "environment", "variables", "relational", "comparator-i;ascii-numeric", "spamtest", "fileinto"];
+
+# Generated: Do not run this script on spam messages
+if allof (environment :matches "vnd.proton.spam-threshold" "*",
+spamtest :value "ge" :comparator "i;ascii-numeric" "${1}")
+{
+    return;
+}
+
+# Move emails into a "Filtered" folder/label (folder/label must exist)
+# Here to pre-filter emails before splitting those into different folders/labels
+
+if anyof (
+# from a specific domain (recommended to sort by domain)
+    address :domain :is "from" "filtered.tld",
+#	address :domain :is "from" "",
+
+# Direct email match (recommended to sort by domain)
+	address :is "from" "filtered@filtered.tld",
+#	address :is "from" "",
+) {
+  fileinto "Filtered"; # Move to Filtered folder (or label)
+  stop; # Do not continue to the next rule
+}
