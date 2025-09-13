@@ -1,0 +1,18 @@
+http:
+  middlewares:
+    pangolin-geoblock:
+      plugin:
+        geoblock:
+          enabled: true
+          defaultAllow: false
+          databaseFilePath: "/plugins-storage/IP2LOCATION-LITE-DB1.IPV6.BIN"
+          allowPrivate: false
+          logBannedRequests: true
+          banIfError: true
+          disallowedStatusCode: 403
+          allowedCountries:
+            - US # United States
+          # Add more countries as needed from the ISO 3166-1 alpha-2 codes
+          databaseAutoUpdate: true
+          databaseAutoUpdateDir: "/data/ip2database"
+          databaseAutoUpdateCode: "DB1"

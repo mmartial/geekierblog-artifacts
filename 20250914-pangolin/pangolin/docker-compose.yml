@@ -1,0 +1,129 @@
+name: pangolin
+services:
+  pangolin:
+    image: docker.io/fosrl/pangolin:1.9.4
+    container_name: pangolin
+    restart: unless-stopped
+    volumes:
+      - ./config:/app/config
+      - pangolin-data:/var/certificates
+      - pangolin-data:/var/dynamic
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/api/v1/"]
+      interval: "10s"
+      timeout: "10s"
+      retries: 15
+
+  gerbil:
+    image: docker.io/fosrl/gerbil:1.2.1
+    container_name: gerbil
+    restart: unless-stopped
+    depends_on:
+      pangolin:
+        condition: service_healthy
+    command:
+      - --reachableAt=http://gerbil:3003
+      - --generateAndSaveKeyTo=/var/config/key
+      - --remoteConfig=http://pangolin:3001/api/v1/
+    volumes:
+      - ./config/:/var/config
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    ports:
+      - 51820:51820/udp
+      - 21820:21820/udp
+      - 443:443
+      - 80:80
+
+  traefik:
+    image: docker.io/traefik:v3.5
+    container_name: traefik
+    restart: unless-stopped
+
+    network_mode: service:gerbil # Ports appear on the gerbil service
+    environment:
+      CLOUDFLARE_DNS_API_TOKEN: "REPLACE_WITH_CLOUDFLARE_DNS_API_TOKEN"
+    depends_on:
+      crowdsec:
+        condition: service_healthy
+      pangolin:
+        condition: service_healthy
+    command:
+      - --configFile=/etc/traefik/traefik_config.yml
+    volumes:
+      - ./config/traefik:/etc/traefik:ro # Volume to store the Traefik configuration
+      - ./config/letsencrypt:/letsencrypt # Volume to store the Let's Encrypt certificates
+      - ./config/traefik/logs:/var/log/traefik # Volume to store Traefik logs
+      - ./config/traefik/rules:/rules
+      - ./IP2LOCATION-LITE-DB1.IPV6.BIN:/plugins-storage/IP2LOCATION-LITE-DB1.IPV6.BIN
+      # Shared volume for certificates and dynamic config in file mode 
+      - pangolin-data:/var/certificates:ro
+      - pangolin-data:/var/dynamic:ro
+
+  middleware-manager:
+    image: hhftechnology/middleware-manager:v3.0.2
+    container_name: middleware-manager
+    restart: unless-stopped
+    depends_on:
+      - pangolin
+      - traefik
+    volumes:
+      - ./data:/data
+      - ./config/traefik/rules:/conf
+      - ./config/middleware-manager:/app/config
+      - ./config/traefik:/etc/traefik
+    environment:
+      - PANGOLIN_API_URL=http://pangolin:3001/api/v1
+      - TRAEFIK_CONF_DIR=/conf
+      - DB_PATH=/data/middleware.db
+      - PORT=3456
+      - ACTIVE_DATA_SOURCE=pangolin
+      - TRAEFIK_STATIC_CONFIG_PATH=/etc/traefik/traefik_config.yml
+      - PLUGINS_JSON_URL=https://raw.githubusercontent.com/hhftechnology/middleware-manager/traefik-int/plugin/plugins.json
+    ports:
+      - "3456:3456"
+
+# Add CrowdSec services
+  crowdsec:
+    image: crowdsecurity/crowdsec:latest
+    depends_on:
+      - gerbil
+    container_name: crowdsec
+    command: -t
+    environment:
+      ACQUIRE_FILES: /var/log/traefik/*.log
+      COLLECTIONS: crowdsecurity/traefik crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-generic-rules crowdsecurity/linux
+      ENROLL_INSTANCE_NAME: pangolin-crowdsec
+      ENROLL_TAGS: docker
+      ENROLL_KEY: REPLACE_WITH_CROWDSEC_ENROLL_KEY
+      GID: "1000"
+      PARSERS: crowdsecurity/whitelists
+    healthcheck:
+      interval: 10s
+      retries: 15
+      timeout: 10s
+      test: ["CMD", "cscli", "capi", "status"]
+    labels:
+      - traefik.enable=false
+    ports:
+      - 8080:8080
+      - 6060:6060
+    expose:
+      - 8080
+      - 6060
+      - 7422
+    restart: unless-stopped
+    volumes:
+      - ./config/crowdsec:/etc/crowdsec
+      - ./config/crowdsec/db:/var/lib/crowdsec/data
+      - ./config/traefik/logs:/var/log/traefik
+
+networks:
+  default:
+    driver: bridge
+    name: pangolin
+    enable_ipv6: true
+
+volumes:
+  pangolin-data:

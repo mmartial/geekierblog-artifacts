@@ -1,0 +1,20 @@
+http:
+  middlewares:
+    crowdsec:
+      plugin:
+        crowdsec-bouncer-traefik:
+          enabled: true
+          crowdsecMode: live
+          crowdsecAppsecEnabled: true
+          crowdsecAppsecHost: crowdsec:7422
+          crowdsecAppsecFailureBlock: true
+          crowdsecAppsecUnreachableBlock: true
+          crowdsecLapiKey: REPLACE_WITH_CROWDSEC_LAPI_KEY
+          crowdsecLapiHost: crowdsec:8080
+          crowdsecLapiScheme: http
+          crowdsecLapiTLSInsecureVerify: false
+          defaultDecisionSeconds: 15
+          httpTimeoutSeconds: 10
+          logLevel: "INFO"
+          updateIntervalSeconds: 15
+          updateMaxFailure: 0

@@ -1,0 +1,16 @@
+#
+# /etc/crowdsec/notifications/discord.yaml
+#
+
+type: http
+name: discord
+log_level: info
+format: |
+  {
+    "username": "CrowdSec",
+    "content": ":bell: {{range . -}}{{$alert := . -}}{{range .Decisions -}}- {{.Value}} will get **{{.Type}}** for the next '{{.Duration}}' for triggering '{{.Scenario}}'\n{{end -}}{{end -}}"
+  }
+url: REPLACE_WITH_DISCORD_WEBHOOK
+method: POST
+headers:
+  Content-Type: application/json
