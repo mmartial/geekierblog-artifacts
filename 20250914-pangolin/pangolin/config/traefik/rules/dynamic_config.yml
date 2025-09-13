@@ -22,10 +22,6 @@ http:
         - websecure
       tls:
         certResolver: letsencrypt
-      middlewares:
-        - pangolin-geoblock@file
-        - crowdsec@file
-#        - my-fail2ban@file
       observability:
         accessLogs: true
 

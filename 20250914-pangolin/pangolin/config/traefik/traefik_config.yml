@@ -55,7 +55,11 @@ entryPoints:
         http:
             tls:
                 certResolver: letsencrypt
-                options: default
+                options: tls-opts@file
+            middlewares:
+              - pangolin-geoblock@file
+              - crowdsec@file
+#              - my-fail2ban@file
         http3:
             advertisedPort: 443
         transport:

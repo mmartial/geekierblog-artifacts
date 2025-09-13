@@ -1,8 +1,7 @@
 tls:
   options:
-    default:
+    tls-opts:
       minVersion: VersionTLS12
-      maxVersion: VersionTLS13
       sniStrict: true
       cipherSuites:
         - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
