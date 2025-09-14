@@ -19,6 +19,7 @@ accessLog:
             DownstreamStatus: keep
             Duration: keep
             RequestMethod: keep
+            RequestAddr: keep
             RequestPath: keep
             RequestProtocol: keep
             RetryAttempts: keep
