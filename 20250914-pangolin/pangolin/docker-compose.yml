@@ -1,7 +1,7 @@
 name: pangolin
 services:
   pangolin:
-    image: docker.io/fosrl/pangolin:1.9.4
+    image: docker.io/fosrl/pangolin:1.12.2
     container_name: pangolin
     restart: unless-stopped
     volumes:
@@ -15,7 +15,7 @@ services:
       retries: 15
 
   gerbil:
-    image: docker.io/fosrl/gerbil:1.2.1
+    image: docker.io/fosrl/gerbil:1.2.2
     container_name: gerbil
     restart: unless-stopped
     depends_on:
@@ -37,7 +37,7 @@ services:
       - 80:80
 
   traefik:
-    image: docker.io/traefik:v3.5
+    image: docker.io/traefik:v3.6.2
     container_name: traefik
     restart: unless-stopped
 
@@ -62,7 +62,7 @@ services:
       - pangolin-data:/var/dynamic:ro
 
   middleware-manager:
-    image: hhftechnology/middleware-manager:v3.0.2
+    image: hhftechnology/middleware-manager:v3.0.3
     container_name: middleware-manager
     restart: unless-stopped
     depends_on:

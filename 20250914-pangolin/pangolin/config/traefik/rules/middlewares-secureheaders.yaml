@@ -1,0 +1,32 @@
+http:
+  middlewares:
+    ################################################################
+    # Good Basic Security Practices
+    ################################################################
+    middlewares-secure-headers:
+      headers:
+        accessControlAllowMethods:
+          - GET
+          - OPTIONS
+          - PUT
+        accessControlMaxAge: 100
+        hostsProxyHeaders:
+          - "X-Forwarded-Host"
+        stsSeconds: 63072000
+        stsIncludeSubdomains: true
+        stsPreload: true
+        forceSTSHeader: true
+        # customFrameOptionsValue: "allow-from https:{{env "DOMAINNAME"}}" #CSP takes care of this but may be needed for organizr.
+        customFrameOptionsValue: SAMEORIGIN # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
+        contentTypeNosniff: true
+        browserXssFilter: true
+        sslForceHost: true # add sslHost to all of the services
+        sslHost: "*.example.com"
+        referrerPolicy: "same-origin"
+        permissionsPolicy: "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+        customResponseHeaders:
+          X-Robots-Tag: "none,noarchive,nosnippet,notranslate,noimageindex,noindex,nofollow" #global not tracking with websearch
+          # X-Robots-Tag: "noindex,nofollow" "  # nextcloud recommandation 
+          server: ""
+          # https://community.traefik.io/t/how-to-make-websockets-work-with-traefik-2-0-setting-up-rancher/1732
+          # X-Forwarded-Proto: "https"

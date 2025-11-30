@@ -60,26 +60,43 @@ entryPoints:
             middlewares:
               - pangolin-geoblock@file
               - crowdsec@file
+              - default-headers@file
+              - middlewares-rate-limit@file
+              - http-cache@file
+              - middlewares-compress@file
+              - middlewares-secure-headers@file
+              - middlewares-buffering@file
 #              - my-fail2ban@file
         http3:
             advertisedPort: 443
         transport:
             respondingTimeouts:
                 readTimeout: 30m
+        observability:
+            accessLogs: true
+            tracing: true
+            metrics: true
+
 experimental:
     plugins:
         badger:
             moduleName: github.com/fosrl/badger
-            version: v1.2.0
+            version: v1.2.1
         crowdsec-bouncer-traefik:
             moduleName: github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin
-            version: v1.4.5
+            version: v1.4.6
         fail2ban:
             moduleName: github.com/tomMoulard/fail2ban
-            version: v0.8.7
+            version: v0.8.9
         geoblock:
             moduleName: "github.com/david-garcia-garcia/traefik-geoblock"
             version: "v1.1.1"
+            settings:
+              useunsafe: true
+        souin:
+            moduleName: github.com/souin/traefik-souin
+            version: v1.7.8
+
 log:
     compress: true
     format: json
@@ -87,6 +104,8 @@ log:
     maxAge: 3
     maxBackups: 3
     maxSize: 100
+    filePath: "/var/log/traefik/traefik.log"
+
 ping:
     entryPoint: web
 providers:

@@ -1,0 +1,17 @@
+http:
+  middlewares:
+    http-cache:
+      plugin:
+        souin:
+          api:
+            # prometheus: {}
+            souin: {}
+          default_cache:
+            ttl: 60s  # TTL par 
+            allowed_http_verbs:
+              - GET
+              - HEAD
+              - POST
+            default_cache_control: public, max-age=60
+            force: true
+          log_level: debug

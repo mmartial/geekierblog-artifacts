@@ -13,3 +13,5 @@ tls:
         - secp521r1
         - secp384r1
         - x25519
+    mintls13:
+      minVersion: VersionTLS13

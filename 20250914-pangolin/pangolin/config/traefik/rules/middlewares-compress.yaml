@@ -1,0 +1,10 @@
+http:
+  middlewares:
+    middlewares-compress:
+      compress:
+        includedContentTypes:
+          - application/json
+          - text/html
+          - text/plain
+        minResponseBodyBytes: 1024
+        defaultEncoding: gzip

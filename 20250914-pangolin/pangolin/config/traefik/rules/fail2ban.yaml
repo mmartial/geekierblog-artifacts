@@ -4,7 +4,7 @@ http:
       plugin:
         fail2ban:
           allowlist:
-            ip: ::1,127.0.0.1,REPLACE_WITH_ALLOWED_IP
+            ip: ::1,127.0.0.1,REPLACE_WITH_ALLOWED_IP_OR_FQDN_FROM_DYNAMIC_DNS_SERVICE
           rules:
             bantime: 15m
             enabled: "true"
