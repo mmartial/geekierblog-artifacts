@@ -60,6 +60,26 @@ services:
       # Shared volume for certificates and dynamic config in file mode 
       - pangolin-data:/var/certificates:ro
       - pangolin-data:/var/dynamic:ro
+      # For log rotation
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  traefik-logrotate:
+    image: vegardit/traefik-logrotate:latest
+    container_name: traefik-logrotate
+    restart: unless-stopped
+    depends_on:
+      - traefik # Important: when adding new services, because we are using ufw-docker, new services must not change the order of started containers, so new services need to have a depends_on entry added. Since traefik waits for other services to be healthy, it is a safe container to use for this purpose.
+    volumes:
+      - ./config/traefik/logs:/var/log/traefik:rw
+      - /var/run/docker.sock:/var/run/docker.sock:rw # needed to send USR1 to traefik
+    environment:
+      TZ: "America/New_York" # Set to your timezone
+      LOGROTATE_LOGS: "/var/log/traefik/*.log"
+      LOGROTATE_TRIGGER_INTERVAL: "daily"
+      LOGROTATE_TRIGGER_SIZE: "50M"
+      LOGROTATE_MAX_BACKUPS: "14"
+      LOGROTATE_USE_DATEEXT: "true"
+      LOGROTATE_DATEFORMAT: "-%Y%m%d"
 
   middleware-manager:
     image: hhftechnology/middleware-manager:v3.0.3
