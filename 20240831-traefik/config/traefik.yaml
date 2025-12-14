@@ -31,6 +31,16 @@ entryPoints: # https://doc.traefik.io/traefik/routing/entrypoints/
   https:
     address: :443
     http:
+      # allow encoded characters in the URL (needed for some apps after 3.6.4 release)
+      # see https://www.reddit.com/r/selfhosted/comments/1ph9jio/traefik_v364_breaks_nextcloud_officecollabora/
+      encodedCharacters:
+        allowEncodedSlash: true
+        #allowEncodedBackSlash: true
+        #allowEncodedNullCharacter: true
+        #allowEncodedSemicolon: true
+        #allowEncodedPercent: true
+        allowEncodedQuestionMark: true
+        # allowEncodedHash: true
       tls:
         # Generate a wildcard domain certificate
         certResolver: letsencrypt # the name here needs to match the one in the certificatesResolvers section
