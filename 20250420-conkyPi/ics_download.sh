@@ -66,4 +66,4 @@ done
 if [ -z "$list" ]; then err "No calendar to merge"; fi
 
 # requires uv (available: brew install uv) -- dependencies listed in the header of merge-cals.py
-uv run $script_dir/ics_merge2txt.py $list --conky || err "Could not merge calendars"
+uv run $script_dir/ics_merge2txt.py $list --conky --days 7 || err "Could not merge calendars"

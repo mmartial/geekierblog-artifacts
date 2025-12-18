@@ -16,9 +16,14 @@ def verb_print(msg, verbose):
   if verbose:
     print(msg)
 
-def process_calendars(ics_files, verbose, local_tz):
+def process_calendars(ics_files, verbose, local_tz, days_limit=None):
     events = {}
     colors = {}
+    
+    limit_date_str = None
+    if days_limit is not None:
+        limit_date = datetime.now(local_tz) + timedelta(days=days_limit)
+        limit_date_str = limit_date.strftime('%Y%m%d')
 
     for cal_file in ics_files:
         verb_print(f"Processing {cal_file}", verbose)
@@ -88,6 +93,10 @@ def process_calendars(ics_files, verbose, local_tz):
                 
                 # Skip if this day is in the past
                 if current_date_str < datetime.now(local_tz).strftime('%Y%m%d'):
+                    continue
+                
+                # Skip if this day is beyond the limit
+                if limit_date_str and current_date_str > limit_date_str:
                     continue
 
                 day_start = '00:00'
@@ -159,6 +168,7 @@ def main():
   parser.add_argument('--conky', action='store_true')
   parser.add_argument('--verbose', '-v', action='store_true', default=False)
   parser.add_argument('--timezone', '-tz', default='America/New_York', help='Target timezone (default: America/New_York)')
+  parser.add_argument('--days', type=int, help='Only process a certain amount of days after the current date')
   args = parser.parse_args()
 
   try:
@@ -167,7 +177,7 @@ def main():
       print(f"ERROR: Unknown timezone {args.timezone}", file=sys.stderr)
       sys.exit(1)
 
-  events, colors = process_calendars(args.ics, args.verbose, local_tz)
+  events, colors = process_calendars(args.ics, args.verbose, local_tz, args.days)
   output_txt = format_output(events, colors, args.conky)
 
   if args.output:
