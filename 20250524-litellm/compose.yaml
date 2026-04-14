@@ -1,6 +1,6 @@
 services:
   litellm:
-    image: ghcr.io/berriai/litellm:main-stable
+    image: docker.litellm.ai/berriai/litellm:main-latest
     restart: unless-stopped
     ports:
       - 44000:4000
@@ -12,13 +12,15 @@ services:
     depends_on:
       - ltl-db # Indicates that this service depends on the 'ltl-db' service, ensuring it starts first
     healthcheck:
+      # Defines the health check configuration for the container
       test:
         - CMD-SHELL
-        - wget -O/tmp/temp --quiet http://127.0.0.1:4000/health/liveliness || exit 1
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
+        - python3 -c "import urllib.request;
+          urllib.request.urlopen('http://localhost:4000/health/liveliness')" # Command to execute for health check
+      interval: 30s # Perform health check every 30 seconds
+      timeout: 10s # Health check command times out after 10 seconds
+      retries: 3 # Retry up to 3 times if health check fails
+      start_period: 40s # Wait 40 seconds after container start before beginning health checks
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
